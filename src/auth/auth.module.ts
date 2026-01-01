@@ -7,7 +7,6 @@ import { User, UserSchema } from '../user/schemas/user.schema';
 
 @Module({
   imports: [
-    JwtModule.register({}),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   providers: [AuthService],

@@ -59,7 +59,7 @@ export class MediaController {
 				cb(null, true);
 			},
 			limits: {
-				fileSize: (process.env.MAX_FILE_SIZE ? parseInt(process.env.MAX_FILE_SIZE) : 2 * 1024 * 1024),
+				fileSize: (process.env.MAX_FILE_SIZE ? parseInt(process.env.MAX_FILE_SIZE) : 5 * 1024 * 1024),
 			},
 		})
 	)
