@@ -81,7 +81,7 @@ export class MediaController {
 	@ApiUnauthorizedResponse({ description: 'Invalid or expired token' })
 	@Get('my')
 	async getMyMedia(@Req() req: RequestWithUser) {
-		const userId = req.user?._id || req.user?.id;
+		const userId = req.user?.sub || req.user?._id || req.user?.id;
 		return this.mediaService.findByUser(userId);
 	}
 
@@ -92,7 +92,7 @@ export class MediaController {
 	@ApiUnauthorizedResponse({ description: 'Invalid or expired token' })
 	@Get(':id')
 	async getMediaById(@Req() req: RequestWithUser, @Param('id') id: string) {
-		const userId = req.user?._id || req.user?.id;
+		const userId = req.user?.sub || req.user?._id || req.user?.id;
 		return this.mediaService.findById(id, userId);
 	}
 
@@ -107,7 +107,7 @@ export class MediaController {
 		@Param('id') id: string,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		const userId = req.user?._id || req.user?.id;
+		const userId = req.user?.sub || req.user?._id || req.user?.id;
 		const { stream, media } = await this.mediaService.downloadMedia(id, userId);
 		res.set({
 			'Content-Type': media.mimeType,
@@ -124,7 +124,7 @@ export class MediaController {
 	@ApiForbiddenResponse({ description: 'Only the owner can delete this media' })
 	@Delete(':id')
 	async deleteMedia(@Req() req: RequestWithUser, @Param('id') id: string) {
-		const userId = req.user?._id || req.user?.id;
+		const userId = req.user?.sub || req.user?._id || req.user?.id;
 		await this.mediaService.deleteMedia(id, userId);
 		return { message: 'Media deleted successfully' };
 	}
@@ -137,7 +137,7 @@ export class MediaController {
 	@ApiForbiddenResponse({ description: 'Only the owner can view permissions' })
 	@Get(':id/permissions')
 	async getMediaPermissions(@Req() req: RequestWithUser, @Param('id') id: string) {
-		const userId = req.user?._id || req.user?.id;
+		const userId = req.user?.sub || req.user?._id || req.user?.id;
 		return this.mediaService.getPermissions(id, userId);
 	}
 
@@ -154,7 +154,7 @@ export class MediaController {
 		@Param('id') id: string,
 		@Body() dto: SetPermissionsDto,
 	) {
-		const userId = req.user?._id || req.user?.id;
+		const userId = req.user?.sub || req.user?._id || req.user?.id;
 		const permissions = await this.mediaService.setPermissions(id, userId, dto.userIds);
 		return { message: 'Permissions updated successfully', permissions };
 	}
